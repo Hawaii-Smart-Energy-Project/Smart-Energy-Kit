@@ -11,7 +11,7 @@ from functools import partial
 import gzip
 import os
 
-from sek_logger import SEKLogger
+from logger import SEKLogger
 
 
 class SEKFileUtil(object):

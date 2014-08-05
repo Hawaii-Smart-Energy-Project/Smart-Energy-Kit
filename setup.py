@@ -40,10 +40,10 @@ setup(name = 'sek', version = '1.0.0',
 
       # Goes in lib.
       py_modules = [
-                 'sek/sek_file_util',
-                 'sek/sek_logger',
-                 'sek/sek_notifier',
-                 'sek/sek_python_util'
+                 'sek/file_util',
+                 'sek/logger',
+                 'sek/notifier',
+                 'sek/python_util'
       ],
 
       scripts = [

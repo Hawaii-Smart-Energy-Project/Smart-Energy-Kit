@@ -7,10 +7,12 @@ __license__ = 'https://raw.github.com/Hawaii-Smart-Energy-Project/Smart' \
               '-Energy-Kit/master/BSD-LICENSE.txt'
 
 import unittest
-from sek_notifier import SEKNotifier
 import smtplib
-from sek_logger import SEKLogger
 import os
+
+from sek_notifier import SEKNotifier
+from sek_logger import SEKLogger
+
 
 SEND_EMAIL = False
 

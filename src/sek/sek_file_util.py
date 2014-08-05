@@ -6,12 +6,12 @@ __copyright__ = 'Copyright (c) 2014, University of Hawaii Smart Energy Project'
 __license__ = 'https://raw.github.com/Hawaii-Smart-Energy-Project/Smart' \
               '-Energy-Kit/master/BSD-LICENSE.txt'
 
-
-from sek_logger import SEKLogger
 import hashlib
 from functools import partial
 import gzip
 import os
+
+from sek_logger import SEKLogger
 
 
 class SEKFileUtil(object):

@@ -7,12 +7,11 @@ __license__ = 'https://raw.github.com/Hawaii-Smart-Energy-Project/Smart' \
               '-Energy-Kit/master/BSD-LICENSE.txt'
 
 import unittest
+
 from sek_logger import SEKLogger
 
+
 # @todo Replace strings with enumeration types.
-from logging import INFO
-from logging import DEBUG
-from logging import ERROR
 
 import re
 

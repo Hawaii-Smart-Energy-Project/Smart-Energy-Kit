@@ -259,7 +259,7 @@ class SEKNotifier(object):
         return success
 
 
-    def lastReportDate(self, noticeType = None):
+    def lastReportDate(self, types = None, noticeType = None):
         """
         Get the last time a notification was reported for the given
         noticeType.
@@ -269,8 +269,8 @@ class SEKNotifier(object):
         :returns: datetime of last report date.
         """
 
-        if not noticeType or (not noticeType in MSGNotificationHistoryTypes):
-            raise Exception('Invalid notice type.')
+        if not noticeType or not types or (not noticeType in types):
+            raise Exception('Invalid notice type or missing types.')
 
         cursor = self.cursor
 

@@ -15,7 +15,6 @@ from email.mime.base import MIMEBase
 from email.mime.text import MIMEText
 from email.utils import formatdate
 from email import Encoders
-
 from logger import SEKLogger
 
 
@@ -39,8 +38,8 @@ class SEKNotifier(object):
 
     Usage:
 
-    from msg_notifier import MSGNotifier
-    self.notifier = MSGNotifier()
+    from sek.notifier import SEKNotifier
+    self.notifier = SEKNotifier()
 
     Public API:
 
@@ -51,7 +50,14 @@ class SEKNotifier(object):
     sendMailWithAttachments(msgBody, files = None, testing = False)
         Send msgBody with files attached as a notification to the mailing
         list defined in the config file.
+
+    lastReportDate(noticeType):
+        The last date where a notification of the given type was reported.
+
+    recordNotificationEvent(noticeType):
+        Record an event in the notification history.
     """
+
 
     def __init__(self, connector = None, dbUtil = None, user = '',
                  password = '', fromaddr = '', toaddr = '', testing_toaddr = '',
@@ -59,7 +65,21 @@ class SEKNotifier(object):
         """
         Constructor.
         """
-        # @todo Validate params.
+
+        if not connector:
+            raise Exception("No connector available.")
+        if not dbUtil:
+            raise Exception("No DBUtil available.")
+        if len(user) == 0:
+            raise Exception("Invalid user.")
+        if len(password) == 0:
+            raise Exception("Invalid password.")
+        if len(fromaddr) == 0:
+            raise Exception("Invalid from address.")
+        if len(toaddr) == 0:
+            raise Exception("Invalid to address.")
+        if len(smtp_server_and_port) == 0:
+            raise Exception("Invalid SMTP server and port.")
 
         self.user = user
         self.password = password
@@ -216,19 +236,55 @@ class SEKNotifier(object):
         return errorOccurred
 
 
-    def recordNotificationEvent(self, noticeType = ''):
+    def recordNotificationEvent(self, types = None, noticeType = None):
         """
         Save a notification event to the notification history.
         :param table: String
-        :param noticeType: String
+        :param noticeType: <enum 'MSGNotificationHistoryTypes'>
         :returns: Boolean
         """
 
+        if not noticeType or not types:
+            return False
+        if not noticeType in types:
+            return False
+
         cursor = self.cursor
         sql = """INSERT INTO "{}" ("notificationType", "notificationTime")
-        VALUES ('{}', NOW())""".format(self.noticeTable, noticeType)
+        VALUES ('{}', NOW())""".format(self.noticeTable, noticeType.name)
         success = self.dbUtil.executeSQL(cursor, sql)
         self.conn.commit()
         if not success:
             raise Exception('Exception while saving the notification time.')
         return success
+
+
+    def lastReportDate(self, noticeType = None):
+        """
+        Get the last time a notification was reported for the given
+        noticeType.
+
+        :param noticeType: String indicating the type of the
+        notification. It is stored in the event history.
+        :returns: datetime of last report date.
+        """
+
+        if not noticeType or (not noticeType in MSGNotificationHistoryTypes):
+            raise Exception('Invalid notice type.')
+
+        cursor = self.cursor
+
+        sql = 'SELECT MAX("notificationTime") FROM "{}" WHERE ' \
+              '"notificationType" = \'{}\''.format(self.noticeTable,
+                                                   noticeType.name)
+
+        success = self.dbUtil.executeSQL(cursor, sql)
+        if success:
+            rows = cursor.fetchall()
+
+            if not rows[0][0]:
+                return None
+            else:
+                return rows[0][0]
+        else:
+            raise Exception('Exception during getting last report date.')

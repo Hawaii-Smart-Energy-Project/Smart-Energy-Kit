@@ -89,18 +89,21 @@ class SEKNotifier(object):
         self.smtp_server_and_port = smtp_server_and_port
         self.logger = SEKLogger(__name__, 'info')
         self.connector = connector
+        # @todo validate connector type
         self.conn = self.connector.connectDB()
         self.cursor = self.conn.cursor()
         self.dbUtil = dbUtil
         self.noticeTable = 'NotificationHistory'
-        self.notificationHeader = "This is a message from the Hawaii Smart " \
-                                  "Energy Project MSG Project notification " \
-                                  "system.\n\n"
+        self.notificationHeader = 'This is a message from the Hawaii Smart ' \
+                                  'Energy Project MSG Project notification ' \
+                                  'system.\n\n'
 
-        self.noReplyNotice = """\n\nThis email account is not monitored. No
-        replies will originate from this account.\n\nYou are receiving this
-        message because you are on the recipient list for notifications for
-        the Hawaii Smart Energy Project."""
+        self.noReplyNotice = '\n\nThis email account is not monitored. No ' \
+                             'replies will originate from this ' \
+                             'account.\n\nYou are receiving this message ' \
+                             'because you are on the recipient list for ' \
+                             'notifications for the Hawaii Smart Energy ' \
+                             'Project.'
 
 
     def sendNotificationEmail(self, msgBody = '', testing = False):

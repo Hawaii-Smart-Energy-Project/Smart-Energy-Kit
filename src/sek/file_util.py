@@ -10,7 +10,7 @@ import hashlib
 from functools import partial
 import gzip
 import os
-
+import stat
 from logger import SEKLogger
 
 
@@ -211,3 +211,26 @@ class SEKFileUtil(object):
         """
 
         return os.path.getsize(fullPath)
+
+
+    def isMoreThanOwnerReadableAndWritable(self, filePath):
+        """
+        Determines if a file has greater permissions than owner read/write.
+        :param filePath: String for path to the file being tested.
+        :returns: Boolean True if the permissions are greater than owner
+        read/write, otherwise returns False.
+        """
+
+        st = os.stat(filePath)
+
+        # Permissions are too permissive if group or others can read,
+        # write or execute.
+        if bool(st.st_mode & stat.S_IRGRP) or bool(
+                        st.st_mode & stat.S_IROTH) or bool(
+                        st.st_mode & stat.S_IWGRP) or bool(
+                        st.st_mode & stat.S_IWOTH) or bool(
+                        st.st_mode & stat.S_IXGRP) or bool(
+                        st.st_mode & stat.S_IXOTH):
+            return True
+        else:
+            return False

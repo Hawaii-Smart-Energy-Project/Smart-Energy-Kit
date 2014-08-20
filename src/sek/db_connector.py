@@ -7,6 +7,7 @@ __copyright__ = 'Copyright (c) 2014, University of Hawaii Smart Energy Project'
 import psycopg2
 import psycopg2.extras
 from sek.logger import SEKLogger
+import sys
 
 
 class SEKDBConnector(object):
@@ -48,7 +49,8 @@ class SEKDBConnector(object):
 
         self.conn = self.connectDB()
         if not self.conn:
-            raise Exception('DB connection not available.')
+            self.logger.log('DB connection not available.', 'error')
+            sys.exit(-1)
 
         try:
             self.dictCur = self.conn.cursor(
@@ -73,8 +75,10 @@ class SEKDBConnector(object):
                 "4}'".format(self.dbName, self.dbUsername, self.dbHost,
                              self.dbPort, self.dbPassword))
         except:
-            self.logger.log("Failed to connect to the database.", 'error')
-            raise Exception("DB connection failed.")
+            self.logger.log(
+                "Failed to connect to the database {}.".format(self.dbName),
+                'error')
+            sys.exit(-1)
 
         self.logger.log(
             "Opened DB connection to database {}.".format(self.dbName))
@@ -96,8 +100,6 @@ class SEKDBConnector(object):
 
         Close the database connection.
         """
-
-        import sys
 
         self.logger.log(
             "Closing the DB connection to database {}.".format(self.dbName))

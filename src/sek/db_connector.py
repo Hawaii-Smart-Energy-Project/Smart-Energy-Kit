@@ -74,9 +74,10 @@ class SEKDBConnector(object):
                 "dbname='{0}' user='{1}' host='{2}' port='{3}' password='{"
                 "4}'".format(self.dbName, self.dbUsername, self.dbHost,
                              self.dbPort, self.dbPassword))
-        except:
+        except Exception as detail:
             self.logger.log(
-                "Failed to connect to the database {}.".format(self.dbName),
+                "Failed to connect to the database {}: {}.".format(self.dbName,
+                                                                   detail),
                 'error')
             sys.exit(-1)
 

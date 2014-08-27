@@ -78,6 +78,7 @@ class SEKDBUtil(object):
 
         return lastSequenceValue
 
+
     def executeSQL(self, cursor, sql, exitOnFail = True):
         """
         Execute SQL given a cursor and a SQL statement.
@@ -123,6 +124,7 @@ class SEKDBUtil(object):
         self.executeSQL(cursor, """select current_database();""")
         row = cursor.fetchone()
         return row
+
 
     def tableColumns(self, cursor, table):
         """

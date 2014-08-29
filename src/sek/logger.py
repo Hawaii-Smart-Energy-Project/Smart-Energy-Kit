@@ -100,8 +100,8 @@ class SEKLogger(object):
 
         self.streamHandlerStdErr = logging.StreamHandler(sys.stderr)
         self.streamHandlerString = logging.StreamHandler(self.ioStream)
-        self.streamHandlerStdErr.setLevel(logging.DEBUG)
-        self.streamHandlerString.setLevel(logging.DEBUG)
+        self.streamHandlerStdErr.setLevel(DEBUG)
+        self.streamHandlerString.setLevel(DEBUG)
 
         formatterString = logging.Formatter(
             u'%(asctime)s - %(name)s - %(levelname)s - %(message)s')
@@ -133,17 +133,17 @@ class SEKLogger(object):
 
         # Support string based types:
         if level == 'info':
-            self.loggerLevel = logging.INFO
+            self.loggerLevel = INFO
         elif level == 'warning':
-            self.loggerLevel = logging.WARNING
+            self.loggerLevel = WARNING
         elif level == 'error':
-            self.loggerLevel = logging.ERROR
+            self.loggerLevel = ERROR
         elif level == 'silent':
-            self.loggerLevel = logging.NOTSET
+            self.loggerLevel = SILENT
         elif level == 'debug':
-            self.loggerLevel = logging.DEBUG
+            self.loggerLevel = DEBUG
         elif level == 'critical':
-            self.loggerLevel = logging.CRITICAL
+            self.loggerLevel = CRITICAL
         else:
             pass
 
@@ -175,7 +175,7 @@ class SEKLogger(object):
         return message
 
 
-    def log(self, message = '', level = None, color = None):
+    def log(self, message = '', level = INFO, color = None):
         """
         Write a log message.
 
@@ -197,23 +197,23 @@ class SEKLogger(object):
         if self.shouldRecord:
             self.logger.addHandler(self.streamHandlerString)
 
-        if level:
+        if type(level) == type(''):
             level = level.lower()
 
-        if level == 'info':
-            loggerLevel = logging.INFO
-        elif level == 'warning':
-            loggerLevel = logging.WARNING
-        elif level == 'debug':
-            loggerLevel = logging.DEBUG
-        elif level == 'error':
-            loggerLevel = logging.ERROR
-        elif level == 'silent':
-            loggerLevel = logging.NOTSET
-        elif level == 'critical':
-            loggerLevel = logging.CRITICAL
-        else:
-            loggerLevel = logging.INFO  # Default logger level.
+            if level == 'info':
+                loggerLevel = INFO
+            elif level == 'warning':
+                loggerLevel = WARNING
+            elif level == 'debug':
+                loggerLevel = DEBUG
+            elif level == 'error':
+                loggerLevel = ERROR
+            elif level == 'silent':
+                loggerLevel = SILENT
+            elif level == 'critical':
+                loggerLevel = CRITICAL
+            else:
+                pass
 
         if loggerLevel != None:
             self.logger.log(loggerLevel, message)

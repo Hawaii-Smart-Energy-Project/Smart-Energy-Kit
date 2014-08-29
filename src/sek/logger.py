@@ -56,10 +56,12 @@ import logging
 from io import StringIO
 from colorlog import ColoredFormatter
 
-
-def enum(**enums):
-    return type('Enum', (), enums)
-
+CRITICAL = logging.CRITICAL
+DEBUG = logging.DEBUG
+ERROR = logging.ERROR
+INFO = logging.INFO
+SILENT = logging.NOTSET
+WARNING = logging.WARNING
 
 class SEKLogger(object):
     """
@@ -68,9 +70,21 @@ class SEKLogger(object):
     It supports recording of log output by setting self.shouldRecord = True.
     The recorded output is then available in self.recording.
 
+    Logging levels correspond to those in the logging module.
+
+    Levels can also be set using the following strings:
+    info, warning, error, silent, debug, critical
+
+    Usage:
+    from sek.logger import SEKLogger, CRITICAL, ERROR, WARNING, INFO, DEBUG, SILENT
+    logger = SEKLogger(__name__, [${LOGGER_LEVEL}])
+
+    where the logger level is optional.
+
+
     """
 
-    def __init__(self, caller, level = 'info', useColor = True):
+    def __init__(self, caller, level = INFO, useColor = True):
         """
         Constructor.
 
@@ -79,8 +93,6 @@ class SEKLogger(object):
         'silent', 'debug', 'critical')
         :param useColor: Boolean if True, color output is used via colorlog.
         """
-
-        # @todo Provide enumeration type instead of strings.
 
         self.logger = logging.getLogger(caller)
 
@@ -119,6 +131,7 @@ class SEKLogger(object):
 
         level = level.lower()
 
+        # Support string based types:
         if level == 'info':
             self.loggerLevel = logging.INFO
         elif level == 'warning':
@@ -132,7 +145,7 @@ class SEKLogger(object):
         elif level == 'critical':
             self.loggerLevel = logging.CRITICAL
         else:
-            self.loggerLevel = logging.INFO
+            pass
 
 
         # Messages equal to and above the logging level will be logged.
@@ -168,10 +181,12 @@ class SEKLogger(object):
 
         Logging levels are
 
-        * info
+        * critical
         * debug
         * error
+        * info
         * silent
+        * warning
 
         :param message: String for a message to be logged.
         :param level: String for an optional logging level.

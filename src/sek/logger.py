@@ -121,7 +121,7 @@ class SEKLogger(object):
         self.streamHandlerStdErr.setFormatter(formatterStdErr)
         self.streamHandlerString.setFormatter(formatterString)
 
-        self.loggerLevel = None
+        self.loggerLevel = level
 
         # The log level that is set here provides the cut-off point for future
         # calls to log that are responsible for the actual log messages.
@@ -129,24 +129,24 @@ class SEKLogger(object):
         # The log level here has a slightly different meaning than the log
         # level used in the call to self.logger.log().
 
-        level = level.lower()
+        if type(level) == type(''):
+            level = level.lower()
 
-        # Support string based types:
-        if level == 'info':
-            self.loggerLevel = INFO
-        elif level == 'warning':
-            self.loggerLevel = WARNING
-        elif level == 'error':
-            self.loggerLevel = ERROR
-        elif level == 'silent':
-            self.loggerLevel = SILENT
-        elif level == 'debug':
-            self.loggerLevel = DEBUG
-        elif level == 'critical':
-            self.loggerLevel = CRITICAL
-        else:
-            pass
-
+            # Support string based types:
+            if level == 'info':
+                self.loggerLevel = INFO
+            elif level == 'warning':
+                self.loggerLevel = WARNING
+            elif level == 'error':
+                self.loggerLevel = ERROR
+            elif level == 'silent':
+                self.loggerLevel = SILENT
+            elif level == 'debug':
+                self.loggerLevel = DEBUG
+            elif level == 'critical':
+                self.loggerLevel = CRITICAL
+            else:
+                pass
 
         # Messages equal to and above the logging level will be logged.
 
@@ -196,6 +196,8 @@ class SEKLogger(object):
         self.logger.addHandler(self.streamHandlerStdErr)
         if self.shouldRecord:
             self.logger.addHandler(self.streamHandlerString)
+
+        loggerLevel = level
 
         if type(level) == type(''):
             level = level.lower()

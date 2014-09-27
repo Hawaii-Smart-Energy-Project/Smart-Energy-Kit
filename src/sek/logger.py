@@ -80,8 +80,6 @@ class SEKLogger(object):
     logger = SEKLogger(__name__, [${LOGGER_LEVEL}])
 
     where the logger level is optional.
-
-
     """
 
     def __init__(self, caller, level = INFO, useColor = True):

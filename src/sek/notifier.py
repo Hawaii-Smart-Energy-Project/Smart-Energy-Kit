@@ -24,6 +24,10 @@ class SEKNotifier(object):
 
     Email settings are stored in the local configuration.
 
+    A DB connection is needed due to notification history usage.
+
+    See: sql/NotificationHistory.sql
+
     Constructor Parameters:
     connector
     dbUtil
